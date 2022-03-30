@@ -1,0 +1,38 @@
+cmake_minimum_required(VERSION 3.0.2)
+project(AVT)
+
+# Are you using any external ROS packages in your code? If so, copy the name of the package below.
+find_package(catkin REQUIRED
+	COMPONENTS cv_bridge nodelet rospy message_generation std_msgs sensor_msgs)
+find_package(OpenCV REQUIRED)
+
+# Add message files that your program publishes or subscribes to.
+add_message_files(FILES
+	DIRECTORY msg
+	ObjectMsg.msg
+	)
+	
+# Add services that your program uses
+	add_service_files(FILES
+	DIRECTORY srv
+	)
+
+catkin_python_setup()
+	
+generate_messages(DEPENDENCIES std_msgs sensor_msgs)
+
+# Are you using any external ROS packages in your code? If so, copy the name of the package below.
+catkin_package(
+   INCLUDE_DIRS include
+   LIBRARIES ${PROJECT_NAME}
+   CATKIN_DEPENDS roscpp nodelet cv_bridge nodelet rospy message_runtime std_msgs sensor_msgs sensor_msgs
+   DEPENDS OpenCV)
+
+# For each .c or .cpp file, copy the below lines and fill in the name of your file.
+#add_executable(message_program src/xxx.cpp)
+add_dependencies(message_program ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+# For each .py file, copy the below lines and fill in the name of your script.
+catkin_install_python(PROGRAMS scripts/object_detection_node.py
+	DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+	)
