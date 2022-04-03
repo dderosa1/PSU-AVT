@@ -1,0 +1,17 @@
+<launch>
+
+	<arg name="name" default="object_detection"/>
+	<arg name="height" default="512"/>
+	<arg name="width" default="1024"/>
+	<arg name="frequency" default="10"/>
+	<arg name="debug" default="false"/>
+	
+	<group ns="$(arg name)">
+		
+		<node name="fake_camera" pkg="psu_avt_od" type="fake_camera.py" args="--height $(arg height) --width $(arg width) --frequency $(arg frequency)" </node>
+			
+		<node if=($arg debug) name="fake_object_detection" pkg="psu_avt_od" type="fake_object_detection.py" args="--debug" </node>
+		`
+		<node unless=($arg debug) name="fake_object_detection" pkg="psu_avt_od" type="fake_object_detection.py"</node>
+		
+	</group>
